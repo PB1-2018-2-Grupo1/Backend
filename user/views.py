@@ -1,17 +1,29 @@
+from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-
+from django.views.generic import View, FormView
 from user.forms import SignUpForm
+from django.conf import settings
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            """raw_password = form.cleaned_data.get('password')"""
-            login(request, user)
-            return redirect('home.html')
-    else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+def index(request):
+	template_name = "index.html"
+	return render(request, 'index.html')
+
+
+class UserFormView(FormView):
+	form_class = SignUpForm
+	template_name = "signup.html"
+
+
+	def register(request):
+	    if request.method == 'POST':
+	        f = UserCreationForm(request.POST)
+	        if f.is_valid():
+	            f.save()
+	            messages.success(request, 'Account created successfully')
+	            return redirect('index')
+
+	    else:
+	        f = UserCreationForm()
+
+	    return render(request, 'signup.html', {'form': f})

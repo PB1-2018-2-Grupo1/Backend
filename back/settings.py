@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -26,6 +27,8 @@ SECRET_KEY = '(e-g78hw8tvvfxo^&(b^x9j1a!$!0akd%v8gs5d@0@jjmcv33+'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+ACCOUNT_SIGNUP_FORM_CLASS = 'back.user.forms.SignUpForm'
 
 
 # Application definition
@@ -58,7 +61,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
