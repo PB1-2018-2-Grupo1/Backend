@@ -6,13 +6,13 @@ from django.core.exceptions import ValidationError
 
 verificador_matricula = RegexValidator(r"(^[0-9]{2}\/)([0-9]+)", "Sua matricula deve possuir xx/xxxxxx")
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(forms.Form):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
-    matricula = forms.CharField(label = "Matricula", required=True, validators=[verificador_matricula])
-    fullname = forms.CharField(label = "Full name")
-    email = forms.EmailField(label='Enter email')
-    password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
+    matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
+    fullname = forms.CharField(label = "Enter Full name", required=True)
+    email = forms.EmailField(label='Enter email', required=True)
+    password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm password', required=True , widget=forms.PasswordInput)
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -43,4 +43,10 @@ class SignUpForm(UserCreationForm):
             self.cleaned_data['email'],
             self.cleaned_data['password1']
         )
+        user.matricula = self.cleaned_data['matricula'],
+        user.fullname =  self.cleaned_data['fullname'],
+        user.save()
+
         return user
+class Meta:
+    model = User
