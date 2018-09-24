@@ -22,7 +22,8 @@ class UserSignupView(View):
 	form_class = SignUpForm
 
 	def get(self, request, *args, **kwargs):
-		return render(request, 'signup.html')
+		form = SignUpForm(request.POST)
+		return render(request, 'signup.html', {'form': form})
 
 	def post(self, request, *args, **kwargs):
 		form = SignUpForm(request.POST)
@@ -35,27 +36,28 @@ class UserLoginView(FormView):
 	form_class = LoginForm
 
 	def get(self, request, *args, **kwargs):
-		return render(request, 'login.html')
+		form = LoginForm(request.POST)
+		return render(request, 'login.html', {'form': form})
 
 	def post(self, request, *args, **kwargs):
 		form = LoginForm(request.POST)
 		if form.is_valid():
-			matriculavalue = form.cleaned_data.get('matricula')
+			usernamevalue = form.cleaned_data.get('username')
 			passwordvalue = form.cleaned_data.get('password1')
-			user = authenticate(username=uservalue, password=passwordvalue)
+			user = authenticate(username=usernamevalue, password=passwordvalue)
 			if user is not None:
 				login(request,user)
 				context = {'form' : form,
 				'error' : 'Sucessful login'}
 
-				return render(request, 'index.html')
+				return render(request, 'index.html', context)
 
 			else:
 				context = {'form' : form,
 				'error' : 'Failed to login'}
 
-				return render(request, 'login.html', {'form' : form})
+				return render(request, 'login.html', context)
 
 		else:
 			context = {'form': form}
-			return render(request, 'login.html')
+			return render(request, 'login.html', context)

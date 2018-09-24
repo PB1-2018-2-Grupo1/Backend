@@ -50,5 +50,5 @@ class SignUpForm(forms.Form):
         return user
 
 class LoginForm(forms.Form):
-    matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
+    username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
     password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
