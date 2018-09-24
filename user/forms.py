@@ -48,5 +48,7 @@ class SignUpForm(forms.Form):
         user.save()
 
         return user
-class Meta:
-    model = User
+
+class LoginForm(forms.Form):
+    matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
+    password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
