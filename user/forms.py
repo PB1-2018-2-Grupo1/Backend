@@ -1,15 +1,23 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from .models import Student
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 verificador_matricula = RegexValidator(r"(^[0-9]{2}\/)([0-9]+)", "Sua matricula deve possuir xx/xxxxxx")
 
 class SignUpForm(forms.Form):
+
+    class Meta:
+        model = User
+
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
-    matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
-    fullname = forms.CharField(label = "Enter Full name", required=True)
     email = forms.EmailField(label='Enter email', required=True)
     password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm password', required=True , widget=forms.PasswordInput)
@@ -37,16 +45,32 @@ class SignUpForm(forms.Form):
 
         return password2
 
-    def save(self, commit=True):
-        user = User.objects.create_user(
-            self.cleaned_data['username'],
-            self.cleaned_data['email'],
-            self.cleaned_data['password1']
-        )
-        user.matricula = self.cleaned_data['matricula'],
-        user.fullname =  self.cleaned_data['fullname'],
-        user.save()
+class StudentSignUpForm(UserCreationForm):
+    matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
+    fullname = forms.CharField(label = "Enter Full name", required=True)
 
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_student = True
+        user.save()
+        student = Student.objects.create(user=user)
+        student.matricula = self.cleaned_data['matricula'],
+        student.fullname =  self.cleaned_data['fullname'],
+        return user
+
+class TeacherSignUpForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_teacher = True
+        if commit:
+            user.save()
         return user
 
 class LoginForm(forms.Form):

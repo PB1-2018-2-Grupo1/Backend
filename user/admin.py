@@ -3,5 +3,3 @@ from .models import User
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('matricula', 'email')
-
-admin.site.register(User, UserAdmin)

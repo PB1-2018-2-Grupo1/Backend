@@ -1,15 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+from django.conf import settings
 
 # Create your models here.
+#User = get_user_model()
 
-class User(models.Model):
 
-	username = models.CharField(max_length=255, null=False)
-	fullname = models.CharField(max_length=255, null=False)
-	matricula = models.CharField(max_length=10, null=False)
-	email = models.EmailField(max_length=255)
-	password1 = models.CharField(max_length=250, null=False)
-	password2 = models.CharField(max_length=250, null=False)
-	is_staff = models.BooleanField('Professor', default=False)
-	is_active = models.BooleanField('Ativo', default=True)
-	date_joined = models.DateTimeField('Data de entrada', auto_now_add=True)
+class User(AbstractUser):
+	is_student = models.BooleanField(default=False)
+	is_teacher = models.BooleanField(default=False)
+
+User = get_user_model()
+
+class Student(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
+    fullname = models.CharField(max_length=255)
+    matricula = models.CharField(max_length=10)
