@@ -52,7 +52,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home.html')
+        return redirect('aluno.html')
 
 
 class TeacherSignUpView(CreateView):
@@ -67,7 +67,7 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home')
+        return redirect('index.html')
 
 class UserLoginView(FormView):
 	template_name = 'login.html'

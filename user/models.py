@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 # Create your models here.
 #User = get_user_model()
@@ -18,3 +19,9 @@ class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
     fullname = models.CharField(max_length=255)
     matricula = models.CharField(max_length=10)
+
+class Class(models.Model):
+	teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+	name = models.CharField(max_length=255)
+	creditos = models.CharField(primary_key=True, max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
+	senha_de_acesso = models.CharField(max_length=255)
