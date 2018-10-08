@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Student
+from .models import Student, Group  
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -76,3 +76,8 @@ class TeacherSignUpForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
     password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name', 'creditos', 'senha_de_acesso',]

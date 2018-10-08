@@ -2,10 +2,11 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView
-from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm
+from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from .models import Group, User
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -25,21 +26,6 @@ def home(request):
             return redirect('home.html')
     return render(request, 'home.html')
 
-"""
-class UserSignupView(View):
-	template_name = 'signup.html'
-	form_class = SignUpForm
-
-	def get(self, request, *args, **kwargs):
-		form = SignUpForm(request.POST)
-		return render(request, 'signup.html', {'form': form})
-
-	def post(self, request, *args, **kwargs):
-		form = SignUpForm(request.POST)
-		if form.is_valid():
-			form.save()
-		return render(request, 'signup.html', {'form': form})
-"""
 class StudentSignUpView(CreateView):
     model = User
     form_class = StudentSignUpForm
@@ -99,3 +85,19 @@ class UserLoginView(FormView):
 		else:
 			context = {'form': form}
 			return render(request, 'login.html', context)
+
+class GroupCreateView(CreateView):
+	model = Group
+	fields = ('name', 'creditos', 'senha_de_acesso')
+	template_name = ''
+
+	def form_valid(self, form):
+		group = form.save(commit=False)
+		group.teacher = self.request.user
+		group.save()
+		messages.success(self.request, 'A turma foi criada com sucesso')
+		return redirect('')
+
+class StudentGroupListView(ListView):
+	model = Group
+	context_object_name = 'groups'
