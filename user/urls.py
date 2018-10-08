@@ -5,8 +5,8 @@ urlpatterns = [
     path('', home, name='home'),
 
     path('students/', include(([
-        path('', StudentGroupListView.as_view(),name = 'group_list'),
-        path('group/add', GroupCreateView.as_view(), name = 'group_add')
+        path('', StudentGroupListView.as_view(), name = 'group_list'),
+  #      path('group/add', GroupCreateView.as_view(), name = 'group_add')
 
     ], 'user'), namespace = 'students')),
 

@@ -5,9 +5,9 @@
 {% block content %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'teachers:group_list' %}">My groups</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'teachers:group_add' quiz.pk %}">{{ group.name }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Create a new question</li>
+      <li class="breadcrumb-item"><a href="{% url 'teachers:group_change_list' %}">My groups</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'teachers:group_add'  %}">{{ group.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Create a new Group</li>
     </ol>
   </nav>
   <h2 class="mb-3">Add a new group</h2>
@@ -15,5 +15,5 @@
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit" class="btn btn-success">Save</button>
-  </form>
+      </form>
 {% endblock %}

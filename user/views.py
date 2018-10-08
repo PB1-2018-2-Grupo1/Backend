@@ -91,6 +91,10 @@ class GroupCreateView(CreateView):
 	fields = ('name', 'creditos', 'senha_de_acesso')
 	template_name = ''
 
+	def get(self, request, *args, **kwargs):
+		form = GroupForm(request.POST)
+		return render(request, 'question_add_form.html', {'form': form})	
+
 	def form_valid(self, form):
 		group = form.save(commit=False)
 		group.teacher = self.request.user
