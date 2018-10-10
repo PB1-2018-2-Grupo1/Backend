@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView
-from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm
+from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -38,7 +38,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('aluno.html')
+        return redirect('/students')
 
 
 class TeacherSignUpView(CreateView):
@@ -53,7 +53,7 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('index.html')
+        return redirect('/teachers')
 
 class UserLoginView(FormView):
 	template_name = 'login.html'
@@ -111,3 +111,17 @@ class StudentGroupListView(ListView):
 		student = self.request.user.student
 		queryset = Group.objects.all()
 		return queryset
+
+class StudentRegisterGroupView(FormView):
+	model = Group
+	template_name = 'group_register.html'
+
+	def get(self, request):
+		form = StudentRegisterGroupForm(request.POST)
+		return render (request, 'group_register.html', {'form':form})
+
+	def post(self, request):
+		student = self.request.user.student
+		form = StudentRegisterGroupForm(request.POST)
+		if form.is_valid():
+			code_value = form.cleaned_data.get('senha_de_acesso')

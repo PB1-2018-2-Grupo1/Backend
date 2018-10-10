@@ -6,15 +6,16 @@
       <thead>
         <tr>
           <th>Groups</th>
-          <th></th>
+          <th>Teacher</th>
         </tr>
       </thead>
       <tbody>
         {% for group in groups %}
           <tr>
             <td class="align-middle">{{ group.name }}</td>
+            <td class="align-middle">{{ group.teacher }}</td>
             <td class="text-right">
-              <a href="{}" class="btn btn-primary">Register</a>
+              <a href="{% url 'students:group_register' %}" class="btn btn-primary">Register</a>
             </td>
           </tr>
         {% empty %}
