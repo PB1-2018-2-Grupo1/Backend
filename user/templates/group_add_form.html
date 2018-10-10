@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'teachers:group_add' %}">{{ group.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Create a new group</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">Add a new group</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+{% endblock %}
