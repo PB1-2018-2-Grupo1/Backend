@@ -89,11 +89,11 @@ class UserLoginView(FormView):
 class GroupCreateView(CreateView):
 	model = Group
 	fields = ('name', 'creditos', 'senha_de_acesso')
-	template_name = ''
+	template_name = 'group_add_form'
 
 	def get(self, request, *args, **kwargs):
 		form = GroupForm(request.POST)
-		return render(request, 'question_add_form.html', {'form': form})	
+		return render(request, 'group_add_form.html', {'form': form})
 
 	def form_valid(self, form):
 		group = form.save(commit=False)
@@ -105,3 +105,9 @@ class GroupCreateView(CreateView):
 class StudentGroupListView(ListView):
 	model = Group
 	context_object_name = 'groups'
+	template_name = 'group_list.html'
+
+	def get_queryset(self):
+		student = self.request.user.student
+		queryset = Group.objects.all()
+		return queryset

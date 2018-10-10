@@ -6,7 +6,7 @@ urlpatterns = [
 
     path('students/', include(([
         path('', StudentGroupListView.as_view(), name = 'group_list'),
-  #      path('group/add', GroupCreateView.as_view(), name = 'group_add')
+#        path('group/add', GroupCreateView.as_view(), name = 'group_add')
 
     ], 'user'), namespace = 'students')),
 
