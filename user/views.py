@@ -123,3 +123,9 @@ class StudentRegisterGroupView(FormView):
 	def post(self, request):
 		student = self.request.user.student
 		form = StudentRegisterGroupForm(request.POST)
+<<<<<<< HEAD
+=======
+		if form.is_valid():
+			code_value = form.cleaned_data.get('senha_de_acesso')
+		return render(request, 'group_list.html')
+>>>>>>> c53f3e0ecf032924f1701c060fe3d5631594e442
