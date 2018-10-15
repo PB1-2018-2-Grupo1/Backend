@@ -111,7 +111,7 @@ class StudentGroupListView(ListView):
 		student = self.request.user.student
 		queryset = Group.objects.all()
 		return queryset
-
+"""
 class StudentRegisterGroupView(FormView):
 	model = Group
 	template_name = 'group_register.html'
@@ -123,9 +123,20 @@ class StudentRegisterGroupView(FormView):
 	def post(self, request):
 		student = self.request.user.student
 		form = StudentRegisterGroupForm(request.POST)
-<<<<<<< HEAD
-=======
+
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
 		return render(request, 'group_list.html')
->>>>>>> c53f3e0ecf032924f1701c060fe3d5631594e442
+"""
+
+def enter_group(request,pk):
+	group = get_object_or_404(Group, pk = pk)
+	student = request.user.student
+
+	if request.method == 'POST':
+		form = StudentRegisterGroupForm()
+		if form.is_valid():
+			with transaction.atomic():
+				student_pass = form.save(commit=False)
+				student_pass.student = student
+				student_pass.save()

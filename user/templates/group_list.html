@@ -15,7 +15,7 @@
             <td class="align-middle">{{ group.name }}</td>
             <td class="align-middle">{{ group.teacher }}</td>
             <td class="text-right">
-              <a href="{% url 'students:group_register' %}" class="btn btn-primary">Register</a>
+              <a href="{% url 'students:group_register' group.pk %}" class="btn btn-primary">Register</a>
             </td>
           </tr>
         {% empty %}

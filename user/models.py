@@ -23,7 +23,7 @@ class Student(models.Model):
 class Group(models.Model):
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE)
 	name = models.CharField(max_length=255)
-	creditos = models.CharField(primary_key=True, max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
+	creditos = models.CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
 	senha_de_acesso = models.CharField(max_length=255)
 
 	def __str__(self):
