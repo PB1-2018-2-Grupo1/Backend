@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView
 from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm
 from django.conf import settings
@@ -111,21 +111,26 @@ class StudentGroupListView(ListView):
 		student = self.request.user.student
 		queryset = Group.objects.all()
 		return queryset
-"""
+
 class StudentRegisterGroupView(FormView):
 	model = Group
+	fields = ('senha_de_acesso')
 	template_name = 'group_register.html'
 
-	def get(self, request):
+	def get(self, request, pk):
+		group = get_object_or_404(Group, pk = pk)
 		form = StudentRegisterGroupForm(request.POST)
 		return render (request, 'group_register.html', {'form':form})
 
-	def post(self, request):
+	def post(self, request, pk):
+		group = get_object_or_404(Group, pk = pk)
 		student = self.request.user.student
+		group_pass = group.senha_de_acesso
 		form = StudentRegisterGroupForm(request.POST)
-
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
+			if code_value == group_pass:
+				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
 """
 
@@ -134,9 +139,13 @@ def enter_group(request,pk):
 	student = request.user.student
 
 	if request.method == 'POST':
-		form = StudentRegisterGroupForm()
+		form = StudentRegisterGroupForm(request.POST)
 		if form.is_valid():
 			with transaction.atomic():
 				student_pass = form.save(commit=False)
 				student_pass.student = student
 				student_pass.save()
+
+	else:
+		return render(request, 'group_register.html')
+"""

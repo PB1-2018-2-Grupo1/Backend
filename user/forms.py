@@ -75,7 +75,7 @@ class TeacherSignUpForm(UserCreationForm):
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
-    password1 = forms.CharField(label='Enter password', required=True , widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Enter Cassword', required=True , widget=forms.PasswordInput)
 
 class GroupForm(forms.ModelForm):
     class Meta:
@@ -83,4 +83,4 @@ class GroupForm(forms.ModelForm):
         fields = ['name', 'creditos', 'senha_de_acesso',]
 
 class StudentRegisterGroupForm(forms.Form):
-        fields = ['senha_de_acesso',]
+    senha_de_acesso = forms.CharField(label='Enter Code')
