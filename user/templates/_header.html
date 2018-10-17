@@ -1,0 +1,10 @@
+<h2>Groups</h2>
+<p class="text-muted">
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'new' %} active{% endif %}" href="{% url 'students:group_list' %}">New</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'taken' %} active{% endif %}" href="{% url 'students:group_registered' %}">Registered</a>
+  </li>
+</ul>

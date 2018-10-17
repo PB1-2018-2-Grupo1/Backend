@@ -21,11 +21,11 @@ class Student(models.Model):
     matricula = models.CharField(max_length=10)
 
 class Group(models.Model):
-	teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+	teacher = models.ForeignKey(User, on_delete=models.CASCADE,)
 	student = models.ManyToManyField(Student)
 	name = models.CharField(max_length=255)
 	creditos = models.CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
-	senha_de_acesso = models.CharField(max_length=255)
+	senha_de_acesso = models.CharField(max_length=255,)
 
 	def __str__(self):
 		return self.name
