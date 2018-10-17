@@ -131,6 +131,7 @@ class StudentRegisterGroupView(FormView):
 			code_value = form.cleaned_data.get('senha_de_acesso')
 			if code_value == group_pass:
 				group.student.add(student)
+				registered_group = RegisteredGroup.objects.create(group=group, student=student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
 
