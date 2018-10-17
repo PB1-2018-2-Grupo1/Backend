@@ -8,7 +8,7 @@ urlpatterns = [
     path('students/', include(([
         path('', StudentGroupListView.as_view(), name = 'group_list'),
         path('group/register/<int:pk>', StudentRegisterGroupView.as_view(), name = 'group_register'),
-        path('group/registered', RegisteredGroupsListView.as_view(), name = 'group_registered'),
+        path('group/registered/', RegisteredGroupsListView.as_view(), name = 'group_registered'),
     ], 'user'), namespace = 'students')),
 
     path('teachers/', include(([

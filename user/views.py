@@ -109,7 +109,7 @@ class StudentGroupListView(ListView):
 
 	def get_queryset(self):
 		student = self.request.user.student
-#		registered_groups = RegisteredGroup.student.values_list('pk', flat=True)
+#		registered_groups = RegisteredGroup.student
 		queryset = Group.objects.all()
 		return queryset
 
@@ -143,7 +143,7 @@ class RegisteredGroupsListView(ListView):
 
 	def get_queryset(self):
 		student = self.request.user.student
-		queryset = RegisteredGroup.objects.all()
+		queryset = RegisteredGroup.objects.filter(student = student)
 
 		return queryset
 
