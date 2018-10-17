@@ -21,10 +21,10 @@ class SignUpView(TemplateView):
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_teacher:
-            return redirect('home.html')
+            return redirect('/teachers/group/add')
         else:
-            return redirect('home.html')
-    return render(request, 'home.html')
+            return redirect('/students/')
+    return render(request, 'signup.html')
 
 class StudentSignUpView(CreateView):
     model = User
@@ -109,6 +109,7 @@ class StudentGroupListView(ListView):
 
 	def get_queryset(self):
 		student = self.request.user.student
+#		registered_groups = RegisteredGroup.student.values_list('pk', flat=True)
 		queryset = Group.objects.all()
 		return queryset
 
