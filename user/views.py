@@ -6,7 +6,7 @@ from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginFo
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from .models import Group, User
+from .models import Group, User, RegisteredGroup
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -130,8 +130,28 @@ class StudentRegisterGroupView(FormView):
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
 			if code_value == group_pass:
+				group.student.add(student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
+
+class RegisteredGroupsListView(ListView):
+	model = RegisteredGroup
+	context_object_name = 'registered_groups'
+	template_name = 'group_registered.html'
+
+	def get_queryset(self):
+		student = self.request.user.student
+		queryset = RegisteredGroup.objects.all()
+
+		return queryset
+
+
+
+
+
+
+
+
 """
 
 def enter_group(request,pk):

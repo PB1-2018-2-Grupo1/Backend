@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="card">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th>Teacher</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for registered_group in registered_groups.all %}
+          <tr>
+            <td>{{ registered_group.group.name }}</td>
+            <td>{{ registered_group.group.teacher }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="bg-light text-center font-italic" colspan="3">You haven't registered in any groups yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

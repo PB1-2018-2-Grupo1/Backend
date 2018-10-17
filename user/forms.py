@@ -57,9 +57,9 @@ class StudentSignUpForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_student = True
         user.save()
-        student = Student.objects.create(user=user)
-        student.matricula = self.cleaned_data['matricula'],
-        student.fullname =  self.cleaned_data['fullname'],
+        matricula = self.cleaned_data['matricula'],
+        fullname = self.cleaned_data['fullname'],
+        student = Student.objects.create(user=user, matricula=matricula, fullname=fullname)
         return user
 
 class TeacherSignUpForm(UserCreationForm):
