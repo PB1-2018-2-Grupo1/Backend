@@ -110,7 +110,7 @@ class StudentGroupListView(ListView):
 	def get_queryset(self):
 		student = self.request.user.student
 #		registered_groups = RegisteredGroup.student
-		queryset = Group.objects.all()
+		queryset = Group.objects.exclude(registered_groups__student = student)
 		return queryset
 
 class StudentRegisterGroupView(FormView):
