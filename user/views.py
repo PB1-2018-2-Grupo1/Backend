@@ -6,7 +6,7 @@ from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginFo
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from .models import Group, User, RegisteredGroup
+from .models import Group, User, RegisteredGroup, AttendanceSheet
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -109,7 +109,6 @@ class StudentGroupListView(ListView):
 
 	def get_queryset(self):
 		student = self.request.user.student
-#		registered_groups = RegisteredGroup.student
 		queryset = Group.objects.exclude(registered_groups__student = student)
 		return queryset
 
@@ -146,15 +145,17 @@ class RegisteredGroupsListView(ListView):
 		queryset = RegisteredGroup.objects.filter(student = student)
 
 		return queryset
-
-
-
-
-
-
-
-
 """
+
+class TeacherAttendanceSheetCreateView(CreateView):
+	model = AttendanceSheet
+
+
+
+
+
+
+
 
 def enter_group(request,pk):
 	group = get_object_or_404(Group, pk = pk)

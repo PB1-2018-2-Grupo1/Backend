@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.validators import RegexValidator
+from django.utils.timezone import now
 
 # Create your models here.
 #User = get_user_model()
@@ -33,3 +34,9 @@ class Group(models.Model):
 class RegisteredGroup(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registered_groups')
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='registered_groups')
+
+class AttendanceSheet(models.Model):
+	group = models.ForeignKey(Group, on_delete=models.CASCADE)
+	student = models.ForeignKey(Student, on_delete = models.CASCADE)
+	present = models.CharField(max_length = 25,default="Chamada nao realizada")
+	date = models.DateTimeField(default=now)
