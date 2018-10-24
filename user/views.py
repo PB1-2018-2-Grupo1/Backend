@@ -145,14 +145,37 @@ class RegisteredGroupsListView(ListView):
 		queryset = RegisteredGroup.objects.filter(student = student)
 
 		return queryset
-"""
+
+class TeacherGroupListView(ListView):
+	model = Group
+	context_object_name = 'groups'
+	template_name = 'teacher_group_registered.html'
+
+	def get_queryset(self):
+		teacher = self.request.user
+		queryset = Group.objects.filter(teacher = teacher)
+
+		return queryset
 
 class TeacherAttendanceSheetCreateView(CreateView):
 	model = AttendanceSheet
+	fields = ('date')
+	template_name = 'attendance_register.html'
+
+	def get(self, request, *args, **kwargs):
+		form = TeacherAttendanceSheetCreateForm(request.POST)
+		return render(request, 'attendance_register.html', {'form': form})
+
+	def form_valid(self, form):
+		attendancesheet = form.save(commit=False)
+		attendancesheet.group = self.request.group
+		attendancesheet.save()
+		messages.success(self.request, 'A chamada foi criada com sucesso')
+		return redirect('')
 
 
 
-
+"""
 
 
 
