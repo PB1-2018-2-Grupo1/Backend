@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView
+from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView, DetailView
 from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm
 from django.conf import settings
 from django.http import HttpResponse
@@ -130,7 +130,6 @@ class StudentRegisterGroupView(FormView):
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
 			if code_value == group_pass:
-				group.student.add(student)
 				registered_group = RegisteredGroup.objects.create(group=group, student=student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
@@ -156,6 +155,26 @@ class TeacherGroupListView(ListView):
 		queryset = Group.objects.filter(teacher = teacher)
 
 		return queryset
+
+class TeacherDetailedGroupView(DetailView):
+	model = Group
+	context_object_name = 'group'
+	template_name = 'teacher_group_detailed.html'
+
+
+
+	def get_context_data(self, **kwargs):
+		group = self.get_object()
+		registered_groups = group.registered_groups.select_related('student__user')
+		extra_context = {
+            'registered_groups': registered_groups,
+        }
+		kwargs.update(extra_context)
+		return super().get_context_data(**kwargs)
+
+	def get_queryset(self):
+		return self.request.user.group.all()
+
 
 class TeacherAttendanceSheetCreateView(CreateView):
 	model = AttendanceSheet

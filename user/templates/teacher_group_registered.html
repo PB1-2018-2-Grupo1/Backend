@@ -14,6 +14,8 @@
           <tr>
             <td>{{ group.name }}</td>
             <td>{{ group.teacher }}</td>
+            <td class ="text-right">
+              <a href="{% url 'teachers:group_detailed' group.pk %}" class ="btn btn-primary">Check</a>
           </tr>
         {% empty %}
           <tr>
