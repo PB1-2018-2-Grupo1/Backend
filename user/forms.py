@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Student, Group
+from .models import Student, Group, AttendanceSheet
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -84,3 +84,8 @@ class GroupForm(forms.ModelForm):
 
 class StudentRegisterGroupForm(forms.Form):
     senha_de_acesso = forms.CharField(label='Enter Code')
+
+class TeacherAttendanceSheetCreateForm(forms.ModelForm):
+    class Meta:
+        model = AttendanceSheet
+        fields = ('date', )

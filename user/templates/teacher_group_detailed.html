@@ -3,7 +3,7 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{}">My groups</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'teachers:group_register' %}">My groups</a></li>
     <li class="breadcrumb-item"><a href="{}">{{ group.name }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">Check</li>
   </ol>
@@ -12,6 +12,9 @@
   <div class="card">
     <table class="table mb-0">
       <thead>
+        <td class="text-right">
+          <a href="{% url 'teachers:attendance_create' group.pk %}" class="btn btn-primary">Register</a>
+        </td>
         <tr>
           <th>Students</th>
         </tr>

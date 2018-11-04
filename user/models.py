@@ -31,11 +31,11 @@ class Group(models.Model):
 		return self.name
 
 class RegisteredGroup(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registered_groups')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='registered_groups')
+	student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registered_groups')
+	group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='registered_groups')
+
 
 class AttendanceSheet(models.Model):
-	group = models.ForeignKey(Group, on_delete=models.CASCADE)
-	student = models.ForeignKey(Student, on_delete = models.CASCADE)
+	registered = models.ForeignKey(RegisteredGroup, on_delete=models.CASCADE)
 	present = models.CharField(max_length = 25,default="Chamada nao realizada")
-	date = models.DateTimeField(default=now)
+	date = models.CharField(max_length = 25, default="teste")

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView, DetailView
-from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm
+from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm, TeacherAttendanceSheetCreateForm
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -95,6 +95,7 @@ class GroupCreateView(CreateView):
 		form = GroupForm(request.POST)
 		return render(request, 'group_add_form.html', {'form': form})
 
+
 	def form_valid(self, form):
 		group = form.save(commit=False)
 		group.teacher = self.request.user
@@ -133,6 +134,12 @@ class StudentRegisterGroupView(FormView):
 				registered_group = RegisteredGroup.objects.create(group=group, student=student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
+
+class StudentGroupDetailedView(DetailView):
+	model = Group
+	context_object_name = 'group'
+	template_name = 'student_group_detailed.html'
+
 
 class RegisteredGroupsListView(ListView):
 	model = RegisteredGroup
@@ -175,42 +182,21 @@ class TeacherDetailedGroupView(DetailView):
 	def get_queryset(self):
 		return self.request.user.group.all()
 
+def create_sheet(request, pk):
+		group_obj = get_object_or_404(Group, pk=pk, teacher=request.user)
 
-class TeacherAttendanceSheetCreateView(CreateView):
-	model = AttendanceSheet
-	fields = ('date')
-	template_name = 'attendance_register.html'
+		if request.method == 'POST':
+			form = TeacherAttendanceSheetCreateForm(request.POST)
+			if form.is_valid():
+				registered_group = RegisteredGroup.objects.filter(group = group_obj)
+				attendance = form.save(commit=False)
+				for object in registered_group:
+					attendance.registered = object
+					AttendanceSheet.objects.create(registered = object, date = attendance)
+					attendance.save()
+				messages.success(request, 'A chamada foi criada')
+				return redirect('/home')
+		else:
+			form = TeacherAttendanceSheetCreateForm()
 
-	def get(self, request, *args, **kwargs):
-		form = TeacherAttendanceSheetCreateForm(request.POST)
-		return render(request, 'attendance_register.html', {'form': form})
-
-	def form_valid(self, form):
-		attendancesheet = form.save(commit=False)
-		attendancesheet.group = self.request.group
-		attendancesheet.save()
-		messages.success(self.request, 'A chamada foi criada com sucesso')
-		return redirect('')
-
-
-
-"""
-
-
-
-
-def enter_group(request,pk):
-	group = get_object_or_404(Group, pk = pk)
-	student = request.user.student
-
-	if request.method == 'POST':
-		form = StudentRegisterGroupForm(request.POST)
-		if form.is_valid():
-			with transaction.atomic():
-				student_pass = form.save(commit=False)
-				student_pass.student = student
-				student_pass.save()
-
-	else:
-		return render(request, 'group_register.html')
-"""
+		return render(request, 'attendance_register.html', {'group_obj': group_obj, 'form': form})
