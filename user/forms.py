@@ -48,6 +48,7 @@ class SignUpForm(forms.Form):
 class StudentSignUpForm(UserCreationForm):
     matricula = forms.CharField(label = "Enter Matricula", required=True, validators=[verificador_matricula])
     fullname = forms.CharField(label = "Enter Full name", required=True)
+    photo = forms.ImageField(label = "Send your photo in jpg, jpeg or png", required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -59,7 +60,8 @@ class StudentSignUpForm(UserCreationForm):
         user.save()
         matricula = self.cleaned_data.get('matricula')
         fullname = self.cleaned_data.get('fullname')
-        student = Student.objects.create(user=user, matricula=matricula, fullname=fullname)
+        photo = self.cleaned_data.get('photo')
+        student = Student.objects.create(user=user, matricula=matricula, fullname=fullname, photo=photo)
         return user
 
 class TeacherSignUpForm(UserCreationForm):
@@ -75,7 +77,7 @@ class TeacherSignUpForm(UserCreationForm):
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
-    password1 = forms.CharField(label='Enter Cassword', required=True , widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Enter Password', required=True , widget=forms.PasswordInput)
 
 class GroupForm(forms.ModelForm):
     class Meta:

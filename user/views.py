@@ -120,7 +120,7 @@ class StudentRegisterGroupView(FormView):
 
 	def get(self, request, pk):
 		group = get_object_or_404(Group, pk = pk)
-		form = StudentRegisterGroupForm(request.POST)
+		form = StudentRegisterGroupForm(request.POST, request.FILES)
 		return render (request, 'group_register.html', {'form':form})
 
 	def post(self, request, pk):
@@ -131,6 +131,7 @@ class StudentRegisterGroupView(FormView):
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
 			if code_value == group_pass:
+				student = Student.objects.get(pk=course_id)
 				registered_group = RegisteredGroup.objects.create(group=group, student=student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')

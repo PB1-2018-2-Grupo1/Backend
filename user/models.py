@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.conf import settings
+import os
+import uuid
 from django.core.validators import RegexValidator
 from django.utils.timezone import now
 
@@ -16,10 +18,20 @@ class User(AbstractUser):
 
 User = get_user_model()
 
+def unique_file_path(instance, filename):
+    # Save original file name in model
+    instance.original_file_name = filename
+    # Get new file name/upload path
+    base, ext = filename.split(".")
+    newname = "%s%s%s" % (uuid.uuid4(),".", ext)
+    return os.path.join('students', newname)
+
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
     fullname = models.CharField(max_length=255)
     matricula = models.CharField(max_length=10)
+    photo = models.ImageField(upload_to=unique_file_path, default = 'students/no-img.jpg')
+    photo_code = models.TextField(max_length=2048)
 
 class Group(models.Model):
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'group')
