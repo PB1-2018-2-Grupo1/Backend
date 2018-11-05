@@ -95,7 +95,6 @@ class GroupCreateView(CreateView):
 		form = GroupForm(request.POST)
 		return render(request, 'group_add_form.html', {'form': form})
 
-
 	def form_valid(self, form):
 		group = form.save(commit=False)
 		group.teacher = self.request.user
@@ -138,8 +137,19 @@ class StudentRegisterGroupView(FormView):
 class StudentGroupDetailedView(DetailView):
 	model = Group
 	context_object_name = 'group'
-	template_name = 'student_group_detailed.html'
+	template_name = 'teste.html'
 
+	def get_context_data(self, **kwargs):
+		group = self.get_object()
+		attendace_sheet = present.attendace_sheet.select_related('student__user')
+		extra_context = {
+            'attendance_sheet': attendance_sheet,
+        }
+		kwargs.update(extra_context)
+		return super().get_context_data(**kwargs)
+
+	def get_queryset(self):
+		return self.request.user.group.all()
 
 class RegisteredGroupsListView(ListView):
 	model = RegisteredGroup
@@ -167,8 +177,6 @@ class TeacherDetailedGroupView(DetailView):
 	model = Group
 	context_object_name = 'group'
 	template_name = 'teacher_group_detailed.html'
-
-
 
 	def get_context_data(self, **kwargs):
 		group = self.get_object()
