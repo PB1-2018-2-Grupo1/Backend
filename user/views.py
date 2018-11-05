@@ -195,13 +195,13 @@ def create_sheet(request, pk):
 
 		if request.method == 'POST':
 			form = TeacherAttendanceSheetCreateForm(request.POST)
+
 			if form.is_valid():
 				registered_group = RegisteredGroup.objects.filter(group = group_obj)
 				attendance = form.save(commit=False)
 				for object in registered_group:
 					attendance.registered = object
-					AttendanceSheet.objects.create(registered = object, date = attendance)
-					attendance.save()
+					AttendanceSheet.objects.create(registered = object, date = attendance.date)
 				messages.success(request, 'A chamada foi criada')
 				return redirect('/home')
 		else:
