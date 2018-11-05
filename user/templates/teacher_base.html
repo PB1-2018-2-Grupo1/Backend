@@ -16,13 +16,11 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown" style="padding-left: 20px;">
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="{% url 'teachers:group_register'%}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Consulta
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="#">Presença por aluno</a>
-
-                  <a class="dropdown-item" href="#">Presença por turma</a>
+                <a class="dropdown-item" href="{% url 'teachers:group_register'%}">Turmas</a>
               </div>
             </li>
 
@@ -31,7 +29,7 @@
                   Cadastro
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Turma</a>
+                  <a class="dropdown-item" href="{% url 'teachers:group_add' %}">Turma</a>
                 </div>
               </li>
 

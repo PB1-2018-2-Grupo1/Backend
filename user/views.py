@@ -95,7 +95,6 @@ class GroupCreateView(CreateView):
 		form = GroupForm(request.POST)
 		return render(request, 'group_add_form.html', {'form': form})
 
-
 	def form_valid(self, form):
 		group = form.save(commit=False)
 		group.teacher = self.request.user
@@ -139,8 +138,19 @@ class StudentRegisterGroupView(FormView):
 class StudentGroupDetailedView(DetailView):
 	model = Group
 	context_object_name = 'group'
-	template_name = 'student_group_detailed.html'
+	template_name = 'teste.html'
 
+	def get_context_data(self, **kwargs):
+		group = self.get_object()
+		attendace_sheet = present.attendace_sheet.select_related('student__user')
+		extra_context = {
+            'attendance_sheet': attendance_sheet,
+        }
+		kwargs.update(extra_context)
+		return super().get_context_data(**kwargs)
+
+	def get_queryset(self):
+		return self.request.user.group.all()
 
 class RegisteredGroupsListView(ListView):
 	model = RegisteredGroup
@@ -169,8 +179,6 @@ class TeacherDetailedGroupView(DetailView):
 	context_object_name = 'group'
 	template_name = 'teacher_group_detailed.html'
 
-
-
 	def get_context_data(self, **kwargs):
 		group = self.get_object()
 		registered_groups = group.registered_groups.select_related('student__user')
@@ -188,13 +196,13 @@ def create_sheet(request, pk):
 
 		if request.method == 'POST':
 			form = TeacherAttendanceSheetCreateForm(request.POST)
+
 			if form.is_valid():
 				registered_group = RegisteredGroup.objects.filter(group = group_obj)
 				attendance = form.save(commit=False)
 				for object in registered_group:
 					attendance.registered = object
-					AttendanceSheet.objects.create(registered = object, date = attendance)
-					attendance.save()
+					AttendanceSheet.objects.create(registered = object, date = attendance.date)
 				messages.success(request, 'A chamada foi criada')
 				return redirect('/home')
 		else:
