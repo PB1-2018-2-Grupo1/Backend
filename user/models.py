@@ -7,6 +7,7 @@ import os
 import uuid
 from django.core.validators import RegexValidator
 from django.utils.timezone import now
+import face_recognition
 
 # Create your models here.
 #User = get_user_model()
@@ -24,14 +25,29 @@ def unique_file_path(instance, filename):
     # Get new file name/upload path
     base, ext = filename.split(".")
     newname = "%s%s%s" % (uuid.uuid4(),".", ext)
+    arq = open("./.name.txt", 'w')
+    arq.write(newname)
+    arq.close()
     return os.path.join('students', newname)
+
+def photo_code_creater():
+    arq = open ("./.name.txt", 'r')
+    name = arq.read()
+    image = face_recognition.load_image_file("./media/students/"+name)
+    arq.close()
+    arq = open("./.name.txt", 'w')
+    arq.write("")
+    arq.close()
+    image = face_recognition.face_encodings(image)[0]
+    print(str(image))
+    return str(image)
 
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
     fullname = models.CharField(max_length=255)
     matricula = models.CharField(max_length=10)
     photo = models.ImageField(upload_to=unique_file_path, default = 'students/no-img.jpg')
-    photo_code = models.TextField(max_length=2048)
+    photo_code = models.TextField(max_length=2048, default = photo_code_creater)
 
 class Group(models.Model):
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'group')
