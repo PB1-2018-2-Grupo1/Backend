@@ -39,8 +39,8 @@ def photo_code_creater():
     arq.write("")
     arq.close()
     image = face_recognition.face_encodings(image)[0]
-    print(str(image))
-    return str(image)
+    print(image)
+    return image
 
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
