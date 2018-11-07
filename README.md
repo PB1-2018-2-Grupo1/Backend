@@ -2,13 +2,12 @@
 
 Installation
 
-sudo apt-get install python3-pip
+sudo apt-get install python3-pip cmake
 
-pip3 install django
-
-pip3 install django-crispy_forms
-
-pip3 install django-extensions
+pip install face_recognition
+pip install django
+pip install django-crispy_forms
+pip install django-extensions
 
 
 
