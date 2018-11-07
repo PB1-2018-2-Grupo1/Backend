@@ -17,9 +17,12 @@ class User(AbstractUser):
 User = get_user_model()
 
 class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
-    fullname = models.CharField(max_length=255)
-    matricula = models.CharField(max_length=10)
+	user = models.OneToOneField(settings.AUTH_USER_MODEL ,on_delete=models.CASCADE, primary_key=True)
+	fullname = models.CharField(max_length=255)
+	matricula = models.CharField(max_length=10)
+
+	def __str__(self):
+		return self.fullname
 
 class Group(models.Model):
 	teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'group')
