@@ -55,8 +55,8 @@ class Group(models.Model):
 	creditos = models.CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
 	senha_de_acesso = models.CharField(max_length=255,)
 
-	def __str__(self):
-		return self.name
+	# def __str__(self):
+	# 	return self.name
 
 class RegisteredGroup(models.Model):
 	student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registered_groups')

@@ -15,8 +15,8 @@
           <tr>
             <td>{{ registered_group.group.name }}</td>
             <td>{{ registered_group.group.teacher }}</td>
-            <td class ="text-right">
-              <a href="{}" class ="btn btn-primary">Check</a>
+            <td class="text-right">
+              <a href="{% url 'students:group_detailed' registered_group.pk %}" class ="btn btn-primary">Check</a>
           </tr>
         {% empty %}
           <tr>

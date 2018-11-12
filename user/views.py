@@ -130,29 +130,31 @@ class StudentRegisterGroupView(FormView):
 		if form.is_valid():
 			code_value = form.cleaned_data.get('senha_de_acesso')
 			if code_value == group_pass:
-				student = Student.objects.get(pk=course_id)
+				# student = Student.objects.get(pk=course_id)
 				registered_group = RegisteredGroup.objects.create(group=group, student=student)
 				return render(request, 'teste.html')
 		return render(request, 'group_list.html')
 
 class StudentGroupDetailedView(DetailView):
-	model = Group
-	context_object_name = 'group'
-	template_name = 'teste.html'
+	model = RegisteredGroup
+	context_object_name = 'registered_group'
+	template_name = 'student_group_detailed.html'
 
-	def get_context_data(self, **kwargs):
-		group = self.get_object()
-		attendace_sheet = present.attendace_sheet.select_related('student__user')
-		extra_context = {
-            'attendance_sheet': attendance_sheet,
-        }
-		kwargs.update(extra_context)
-		return super().get_context_data(**kwargs)
+	# def get_context_data(self, pk, **kwargs):
+	# 	registered_group = get_object_or_404(RegisteredGroup, pk = pk)
+	# 	attendance_sheet = registered_group.attendace_sheet.select_related('student__user')
+	# 	extra_context = {
+    #         'attendance_sheet': attendance_sheet,
+    #     }
+	# 	kwargs.update(extra_context)
+	# 	return super().get_context_data(**kwargs)
 
 	def get_queryset(self):
-		return self.request.user.group.all()
+		# registered_group = get_object_or_404(RegisteredGroup, pk = pk)
+		student = self.request.user.student
+		queryset = AttendanceSheet.objects.filter(registered__registered_group__student = student)
 
-class RegisteredGroupsListView(ListView):
+class StudentRegisteredGroupsListView(ListView):
 	model = RegisteredGroup
 	context_object_name = 'registered_groups'
 	template_name = 'group_registered.html'
