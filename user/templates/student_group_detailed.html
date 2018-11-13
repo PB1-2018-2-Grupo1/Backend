@@ -18,13 +18,11 @@
       </thead>
       <tbody>
           <tr>
-            <td class="align-middle">{{ registered_group.student.fullname }}</td>
+            <td class="align-middle">{{ registered_group.attendance_sheet_set.all }}</td>
           </tr>
-        {% empty %}
         <tr>
           <td class="bg-light text-center font-italic" colspan="3">No students registered yet.</td>
         </tr>
-        {% endfor %}
       </tbody>
     </table>
   </div>

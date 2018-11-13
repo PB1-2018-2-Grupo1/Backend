@@ -6,7 +6,7 @@ from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginFo
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from .models import Group, User, RegisteredGroup, AttendanceSheet
+from .models import Group, User, RegisteredGroup, AttendanceSheet, Student
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -140,19 +140,6 @@ class StudentGroupDetailedView(DetailView):
 	context_object_name = 'registered_group'
 	template_name = 'student_group_detailed.html'
 
-	# def get_context_data(self, pk, **kwargs):
-	# 	registered_group = get_object_or_404(RegisteredGroup, pk = pk)
-	# 	attendance_sheet = registered_group.attendace_sheet.select_related('student__user')
-	# 	extra_context = {
-    #         'attendance_sheet': attendance_sheet,
-    #     }
-	# 	kwargs.update(extra_context)
-	# 	return super().get_context_data(**kwargs)
-
-	def get_queryset(self):
-		# registered_group = get_object_or_404(RegisteredGroup, pk = pk)
-		student = self.request.user.student
-		queryset = AttendanceSheet.objects.filter(registered__registered_group__student = student)
 
 class StudentRegisteredGroupsListView(ListView):
 	model = RegisteredGroup

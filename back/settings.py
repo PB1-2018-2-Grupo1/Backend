@@ -30,7 +30,7 @@ SECRET_KEY = '(e-g78hw8tvvfxo^&(b^x9j1a!$!0akd%v8gs5d@0@jjmcv33+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['23d1631d.ngrok.io']
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'back.user.forms.SignUpForm'
 
