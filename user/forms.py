@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.contrib.auth import get_user_model
 import os
+from django.contrib.admin import widgets
 
 User = get_user_model()
 
@@ -88,7 +89,13 @@ class GroupForm(forms.ModelForm):
 class StudentRegisterGroupForm(forms.Form):
     senha_de_acesso = forms.CharField(label='Enter Code')
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class TeacherAttendanceSheetCreateForm(forms.ModelForm):
     class Meta:
         model = AttendanceSheet
-        fields = ('date', )
+        fields = ['date']
+        widgets = {
+            'date': DateInput(),
+        }
