@@ -19,8 +19,8 @@
       <tbody>
         {% for attendance_sheet in registered_group.attendance_sheet.all %}
           <tr>
-            <td class="align-left">{{ attendance_sheet.date }}</td>
-            <td class="align-right">{{ attendance_sheet.present }}</td>
+            <td>{{ attendance_sheet.date }}</td>
+            <td style="text-align: right;">{{ attendance_sheet.present }}</td>
           </tr>
         {% endfor %}
       </tbody>
