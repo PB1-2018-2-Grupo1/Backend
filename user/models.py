@@ -64,6 +64,6 @@ class RegisteredGroup(models.Model):
 
 
 class AttendanceSheet(models.Model):
-	registered = models.ForeignKey(RegisteredGroup, on_delete=models.CASCADE, related_name = 'attendace_sheet')
+	registered = models.ForeignKey(RegisteredGroup, on_delete=models.CASCADE, related_name = 'attendance_sheet')
 	present = models.CharField(max_length = 25,default="Chamada nao realizada")
 	date = models.CharField(max_length = 25, default="teste")

@@ -4,25 +4,25 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{}">My groups</a></li>
-    <li class="breadcrumb-item"><a href="{}">{{ group.name }}</a></li>
+    <li class="breadcrumb-item"><a href="{}">{{ registered_group.group.name }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">Check</li>
   </ol>
 </nav>
-<h2 class="mb-3">{{ group.name }}</h2>
+<h2 class="mb-3">{{ registered_group.group.name }}</h2>
   <div class="card">
     <table class="table mb-0">
       <thead>
         <tr>
-          <th>Students</th>
+          <th>Sheets</th>
         </tr>
       </thead>
       <tbody>
+        {% for attendance_sheet in registered_group.attendance_sheet.all %}
           <tr>
-            <td class="align-middle">{{ registered_group.attendance_sheet_set.all }}</td>
+            <td class="align-left">{{ attendance_sheet.date }}</td>
+            <td class="align-right">{{ attendance_sheet.present }}</td>
           </tr>
-        <tr>
-          <td class="bg-light text-center font-italic" colspan="3">No students registered yet.</td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
