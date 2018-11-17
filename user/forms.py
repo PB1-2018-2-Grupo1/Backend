@@ -95,7 +95,7 @@ class DateInput(forms.DateInput):
 class TeacherAttendanceSheetCreateForm(forms.ModelForm):
     class Meta:
         model = AttendanceSheet
-        fields = ['date']
+        fields = ['date', 'time']
         widgets = {
             'date': DateInput(),
         }
