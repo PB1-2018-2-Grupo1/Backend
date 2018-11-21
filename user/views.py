@@ -171,10 +171,14 @@ class TeacherDetailedGroupView(DetailView):
 	def get_context_data(self, **kwargs):
 		group = self.get_object()
 		registered_groups = group.registered_groups.select_related('student__user')
+		attendance_sheets  = AttendanceSheet.objects.all()
 		extra_context = {
             'registered_groups': registered_groups,
+			'attendance_sheets': attendance_sheets,
         }
 		kwargs.update(extra_context)
+
+
 		return super().get_context_data(**kwargs)
 
 	def get_queryset(self):

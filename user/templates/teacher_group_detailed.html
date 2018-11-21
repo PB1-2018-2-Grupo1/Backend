@@ -30,6 +30,21 @@
         </tr>
         {% endfor %}
       </tbody>
+      <tr>
+        <th>Sheets</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for attendance_sheet in attendance_sheets %}
+        <tr>
+          <td class="align-middle">{{ attendance_sheet.date }}</td>
+        </tr>
+      {% empty %}
+      <tr>
+        <td class="bg-light text-center font-italic" colspan="3">No attendance_sheet registered yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
     </table>
   </div>
 {% endblock %}
