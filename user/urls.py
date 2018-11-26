@@ -9,7 +9,8 @@ urlpatterns = [
         path('', StudentGroupListView.as_view(), name = 'group_list'),
         path('group/register/<int:pk>', StudentRegisterGroupView.as_view(), name = 'group_register'),
         path('group/registered/', StudentRegisteredGroupsListView.as_view(), name = 'group_registered'),
-        path('group/registered/<int:pk>', StudentGroupDetailedView.as_view(), name = 'group_detailed')
+        path('group/registered/<int:pk>', StudentGroupDetailedView.as_view(), name = 'group_detailed'),
+        path('group/registered/<int:pk>/delete', StudentRegisteredGroupDeleteView.as_view(), name = 'group_delete'),
     ], 'user'), namespace = 'students')),
 
     path('teachers/', include(([
@@ -18,6 +19,7 @@ urlpatterns = [
         path('group/registered', TeacherGroupListView.as_view(), name = 'group_register'),
         path('group/registered/<int:pk>', TeacherDetailedGroupView.as_view(), name = 'group_detailed'),
         path('group/registered/<int:pk>/attendance', create_sheet, name = 'attendance_create'),
+        path('group/registered/<int:pk>/delete', TeacherRemoveStudentDeleteView.as_view(), name = 'group_delete'),
 
 
     ], 'user'), namespace = 'teachers'))

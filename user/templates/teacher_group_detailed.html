@@ -17,12 +17,16 @@
         </td>
         <tr>
           <th>Students</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {% for registered_group in registered_groups %}
           <tr>
-            <td class="align-middle">{{ registered_group.student.fullname }}</td>
+            <td>{{ registered_group.student.fullname }}</td>
+            <td></td>
+            <td><a href="{% url 'teachers:group_delete' registered_group.pk %}" class="btn btn-danger float-right">Delete</a></td>
           </tr>
         {% empty %}
         <tr>
@@ -33,15 +37,16 @@
       <tr>
         <th>Sheets</th>
       </tr>
-    </thead>
     <tbody>
       {% for attendance_sheet in attendance_sheets %}
         <tr>
-          <td class="align-middle">{{ attendance_sheet.date }}</td>
+          <td> {{ attendance_sheet.date }} </td>
+          <td>{{ attendance_sheet.registered.student.fullname }}</td>
+          <td> {{ attendance_sheet.present }}</td>
         </tr>
       {% empty %}
       <tr>
-        <td class="bg-light text-center font-italic" colspan="3">No attendance_sheet registered yet.</td>
+        <td class="bg-light text-center font-italic" colspan="3">No attendance sheet registered yet.</td>
       </tr>
       {% endfor %}
     </tbody>

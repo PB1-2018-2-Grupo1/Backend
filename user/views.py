@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView, DetailView
+from django.views.generic import View, FormView, TemplateView, CreateView, ListView, UpdateView, DetailView, DeleteView
 from user.forms import SignUpForm, TeacherSignUpForm, StudentSignUpForm, LoginForm, GroupForm, StudentRegisterGroupForm, TeacherAttendanceSheetCreateForm
 from django.conf import settings
 from django.http import HttpResponse
@@ -21,7 +21,7 @@ class SignUpView(TemplateView):
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_teacher:
-            return redirect('/teachers/group/add')
+            return redirect('/teachers/group/registered')
         else:
             return redirect('/students/')
     return render(request, 'signup.html')
@@ -53,7 +53,7 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('/teachers')
+        return redirect('/teachers/group/add')
 
 class UserLoginView(FormView):
 	template_name = 'login.html'
@@ -100,7 +100,7 @@ class GroupCreateView(CreateView):
 		group.teacher = self.request.user
 		group.save()
 		messages.success(self.request, 'A turma foi criada com sucesso')
-		return redirect('')
+		return redirect('/home')
 
 class StudentGroupListView(ListView):
 	model = Group
@@ -152,6 +152,17 @@ class StudentRegisteredGroupsListView(ListView):
 
 		return queryset
 
+class StudentRegisteredGroupDeleteView(DeleteView):
+	model = RegisteredGroup
+	template_name = 'student_group_delete.html'
+	success_url = reverse_lazy('students:group_registered')
+
+	def delete(self, request, pk, *args, **kwargs):
+		registered_group = get_object_or_404(RegisteredGroup, pk = pk)
+		messages.success(request, 'The student %s was deleted with success!' % registered_group.student.fullname)
+		return super().delete(request, *args, **kwargs)
+
+
 class TeacherGroupListView(ListView):
 	model = Group
 	context_object_name = 'groups'
@@ -178,11 +189,20 @@ class TeacherDetailedGroupView(DetailView):
         }
 		kwargs.update(extra_context)
 
-
 		return super().get_context_data(**kwargs)
 
 	def get_queryset(self):
 		return self.request.user.group.all()
+
+class TeacherRemoveStudentDeleteView(DeleteView):
+	model = RegisteredGroup
+	template_name = 'student_group_delete.html'
+	success_url = reverse_lazy('teachers:group_register')
+
+	def delete(self, request, pk, *args, **kwargs):
+		registered_group = get_object_or_404(RegisteredGroup, pk = pk)
+		messages.success(request, 'The student %s was deleted with success!' % registered_group.student.fullname)
+		return super().delete(request, *args, **kwargs)
 
 def create_sheet(request, pk):
 		group_obj = get_object_or_404(Group, pk=pk, teacher=request.user)
