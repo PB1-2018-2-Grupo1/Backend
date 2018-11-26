@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from .models import Group, User, RegisteredGroup, AttendanceSheet, Student
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -181,7 +182,7 @@ class TeacherDetailedGroupView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		group = self.get_object()
-		registered_groups = group.registered_groups.select_related('student__user')
+		registered_groups = group.registered_groups.select_related('student__user').filter(is_deleted = False)
 		attendance_sheets  = AttendanceSheet.objects.all()
 		extra_context = {
             'registered_groups': registered_groups,
@@ -197,12 +198,15 @@ class TeacherDetailedGroupView(DetailView):
 class TeacherRemoveStudentDeleteView(DeleteView):
 	model = RegisteredGroup
 	template_name = 'student_group_delete.html'
-	success_url = reverse_lazy('teachers:group_register')
 
 	def delete(self, request, pk, *args, **kwargs):
 		registered_group = get_object_or_404(RegisteredGroup, pk = pk)
+		registered_group.is_deleted = True
+		# registered_group.deleted_at = timezone.localtime(timezone.now())
+		registered_group.deleted_by = self.request.user
 		messages.success(request, 'The student %s was deleted with success!' % registered_group.student.fullname)
-		return super().delete(request, *args, **kwargs)
+		registered_group.save()
+		return redirect('/home')
 
 def create_sheet(request, pk):
 		group_obj = get_object_or_404(Group, pk=pk, teacher=request.user)

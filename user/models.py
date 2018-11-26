@@ -63,6 +63,9 @@ class Group(models.Model):
 class RegisteredGroup(models.Model):
 	student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='registered_groups')
 	group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='registered_groups')
+	deleted_at = models.DateTimeField(blank=True, null=True)
+	deleted_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+	is_deleted = models.BooleanField(default=False)
 
 # class ClassTimeChoice(Enum):   # A subclass of Enum
 #     1 = "06:00-8:00"
