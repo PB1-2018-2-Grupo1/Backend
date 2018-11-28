@@ -149,7 +149,7 @@ class StudentRegisteredGroupsListView(ListView):
 
 	def get_queryset(self):
 		student = self.request.user.student
-		queryset = RegisteredGroup.objects.filter(student = student)
+		queryset = RegisteredGroup.objects.filter(student = student, deleted_at = None)
 
 		return queryset
 
@@ -182,7 +182,7 @@ class TeacherDetailedGroupView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		group = self.get_object()
-		registered_groups = group.registered_groups.select_related('student__user').filter(is_deleted = False)
+		registered_groups = group.registered_groups.select_related('student__user')
 		attendance_sheets  = AttendanceSheet.objects.all()
 		extra_context = {
             'registered_groups': registered_groups,
@@ -202,7 +202,7 @@ class TeacherRemoveStudentDeleteView(DeleteView):
 	def delete(self, request, pk, *args, **kwargs):
 		registered_group = get_object_or_404(RegisteredGroup, pk = pk)
 		registered_group.is_deleted = True
-		# registered_group.deleted_at = timezone.localtime(timezone.now())
+		registered_group.deleted_at = timezone.localtime(timezone.now())
 		registered_group.deleted_by = self.request.user
 		messages.success(request, 'The student %s was deleted with success!' % registered_group.student.fullname)
 		registered_group.save()
@@ -215,7 +215,7 @@ def create_sheet(request, pk):
 			form = TeacherAttendanceSheetCreateForm(request.POST)
 
 			if form.is_valid():
-				registered_group = RegisteredGroup.objects.filter(group = group_obj)
+				registered_group = RegisteredGroup.objects.filter(group = group_obj, deleted_at = None)
 				attendance = form.save(commit=False)
 				for object in registered_group:
 					attendance.registered = object

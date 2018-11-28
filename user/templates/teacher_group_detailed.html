@@ -26,7 +26,11 @@
           <tr>
             <td>{{ registered_group.student.fullname }}</td>
             <td></td>
-            <td><a href="{% url 'teachers:group_delete' registered_group.pk %}" class="btn btn-danger float-right">Delete</a></td>
+            {%  if not registered_group.deleted_at %}
+              <td><a href="{% url 'teachers:group_delete' registered_group.pk %}" class="btn btn-danger float-right">Delete</a></td>
+            {% else %}
+              <td width="440px">Aluno removido da turma dia: {{registered_group.deleted_at}}</td>
+            {% endif %}
           </tr>
         {% empty %}
         <tr>
